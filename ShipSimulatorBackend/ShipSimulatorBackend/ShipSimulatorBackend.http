@@ -1,0 +1,6 @@
+@ShipSimulatorBackend_HostAddress = http://localhost:5030
+
+GET {{ShipSimulatorBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
