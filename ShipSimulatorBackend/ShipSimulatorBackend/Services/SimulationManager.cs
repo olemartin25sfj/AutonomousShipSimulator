@@ -1,5 +1,9 @@
 using ShipSimulatorBackend.Models; // For å få tilgang til Ship-klassen
 using System.Collections.Concurrent; // For trådsikker samling (ConcurrentDictionary)
+using System.Threading;
+
+    
+
 
 namespace ShipSimulatorBackend.Services
 {
@@ -12,7 +16,7 @@ namespace ShipSimulatorBackend.Services
 
         // System.Timers.Timer er en timer som kan kjøres i en egen tråd
         // og kaller en spesifikk metode periodisk.
-        private System.Timers.Timer? _simulationTimer;
+        private System.Threading.Timer? _simulationTimer;
 
         // Konstant for hvor ofte simuleringen skal oppdateres (hvert 0.1 sekund).
         private const double SimulationIntervalSeconds = 0.1;
@@ -76,8 +80,8 @@ namespace ShipSimulatorBackend.Services
                 // 2. null er state-objektet (trenger ikke her).
                 // 3. TimeSpan.Zero betyr start med en gang.
                 // 4. TimeSpan.FromSeconds(SimulationIntervalSeconds) er intervallet mellom kallene.
-                _simulationTimer = new System.Timers.Timer(Tick, null, TimeSpan.Zero, TimeSpan.FromSeconds(SimulationIntervalSeconds));
-                _simulationTimer.Start(); // Viktig: Start timeren eksplisitt
+                _simulationTimer = new System.Threading.Timer(Tick, null, TimeSpan.Zero, TimeSpan.FromSeconds(SimulationIntervalSeconds));
+                // System.Threading.Timer starter automatisk når den opprettes med intervall
                 Console.WriteLine("Simulation started."); // Skriver til Visual Studios Output-vindu
             }
         }
@@ -87,8 +91,7 @@ namespace ShipSimulatorBackend.Services
         /// </summary>
         public void StopSimulation()
         {
-            _simulationTimer?.Stop(); // Stopp timeren
-            _simulationTimer?.Dispose(); // Frigjør ressurser
+            _simulationTimer?.Dispose(); // Dispose() stopper og frigjør ressurser for System.Threading.Timer
             _simulationTimer = null;
             Console.WriteLine("Simulation stopped.");
         }

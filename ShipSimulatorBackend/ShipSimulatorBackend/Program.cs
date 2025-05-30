@@ -1,6 +1,9 @@
+using ShipSimulatorBackend.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSingleton<ShipSimulatorBackend.Services.SimulationManager>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -17,6 +20,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+var simulationManager = app.Services.GetRequiredService<ShipSimulatorBackend.Services.SimulationManager>();
+simulationManager.StartSimulation();
 
 app.UseAuthorization();
 
